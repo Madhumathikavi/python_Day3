@@ -1,0 +1,19 @@
+import pandas as pd
+df = pd.read_csv("data.csv")
+
+print(df.head())
+print(df.info())
+
+print("Average marks:",df["marks"].mean())
+df["Result"]=df["marks"].apply(lambda i :"Pass" if i>=50 else "Fail")
+df["Grade"]=df["marks"].apply(lambda x: "A" if x>=80 else "B" if x>=60 else "C")
+print(df)
+print("number of pass/Fail:\n",df["Result"].value_counts())
+print("Grade distribution:\n",df["Grade"].value_counts())
+
+top_scorer=df.loc[df["marks"].idxmax()]
+print("Top scorer name:",top_scorer["name"])
+print("Top scorer marks:",top_scorer["marks"])
+print("Top scorer grade:",top_scorer["Grade"])
+
+print("Marks greater than 80:\n",df[df["marks"]>80])
