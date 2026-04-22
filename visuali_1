@@ -1,0 +1,50 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data=pd.read_csv("dirty.csv")
+
+data.columns = data.columns.str.strip().str.lower()
+
+data["name"] = data["name"].astype(str).str.strip().str.upper()
+data["marks"]=data["marks"].astype(str).str.strip()
+data["marks"]=pd.to_numeric(data["marks"], errors = "coerce")
+data["city"]=data["city"].astype(str).str.strip().str.title()
+
+data["marks"]=data["marks"].fillna(data["marks"].mean())
+
+data.drop_duplicates(inplace=True)
+
+#grouping by city and plotting average marks
+data.groupby("city")["marks"].mean().plot(kind="bar")
+plt.title("Average marks by city")
+plt.xlabel("City")
+plt.ylabel("Average Marks")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+plt.hist(data["marks"],bins=5)
+plt.title("Distribution of Marks")
+plt.xlabel("Marks")
+plt.ylabel("Frequency")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+data_sorted = data.sort_values(by="marks", ascending=False)
+top10 = data_sorted.head(10)
+top10.plot(x="name", y="marks", kind="bar")
+plt.title("Top 10 Scorers")
+plt.xlabel("Name")
+plt.ylabel("Marks")
+plt.xticks(rotation=45)
+
+for i, v in enumerate(top10["marks"]):
+    plt.text(i, v, str(v), ha='center')
+
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+top_city = data.groupby("city")["marks"].mean().idxmax()
+print("City with highest average marks:", top_city)
