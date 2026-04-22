@@ -36,6 +36,13 @@ data = data.sort_values(by="marks", ascending=False)
 
 print("Final cleaned data:\n",data)
 
+#visualization
+data.groupby("city")["marks"].mean().plot(kind="bar")
+plt.title("Average marks by city")
+plt.xlabel("City")
+plt.ylabel("Average Marks")
+plt.show()
+
 #missing values count
 print("\nMissing values:\n", data.isnull().sum())
 
